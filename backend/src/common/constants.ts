@@ -13,3 +13,4 @@ export const GET_VALUES_KEY = 'get-values';
 export const PUSH_VALUES_KEY = 'push-values';
 
 export const DELETE_KEY = 'del-key';
+export const DEFAULT_EXP_TIME = 60;

@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { UsersService } from 'src/users/users.service';
 import { GetCommentQueryDto } from './dto/get-comment-query.dto';
 import { RedisService } from 'src/common/redis/redis.service';
+import { PostsService } from 'src/posts/posts.service';
 
 const CACHE_PREFIX = 'comments';
 
@@ -15,6 +16,7 @@ export class CommentsService {
   constructor(
     private prismaService: PrismaService,
     private usersService: UsersService,
+    private postsService: PostsService,
     private redisService: RedisService,
   ) {}
 
@@ -42,10 +44,13 @@ export class CommentsService {
   }
 
   async createComment(
+    isAdmin: boolean,
     userId: string,
     commentDto: CreateCommentDto,
   ): Promise<CommentDto> {
     await this.usersService.getUserById(userId);
+
+    await this.postsService.getPostById(isAdmin, userId, commentDto.postId);
 
     const commentId = uuid();
     const createdComment = await this.prismaService.comment.create({

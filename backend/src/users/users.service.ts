@@ -145,7 +145,8 @@ export class UsersService {
   async updateUser(userId, userDto): Promise<UserDto> {
     const data: any = {};
 
-    if (userDto.password) data.password = userDto.password;
+    if (userDto.password)
+      data.password = await getHashedPassword(userDto.password);
     if (userDto.role) data.role = userDto.role;
     if (userDto.isActivated) data.isActivated = userDto.isActivated;
 
@@ -179,7 +180,10 @@ export class UsersService {
       },
     });
 
-    if (!user) throw new BadRequestException('User already activated');
+    if (!user)
+      throw new BadRequestException(
+        "User already activated or activation link doesn't exist",
+      );
 
     const updatedUser = await this.prismaService.user.update({
       where: {

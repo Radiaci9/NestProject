@@ -18,7 +18,6 @@ export class ProfileController {
 
   @ApiOperation({ summary: 'Get user profile' })
   @ApiResponse({ status: 200, type: ProfileDto, isArray: true })
-  @IsNeedActivation()
   @ApiBearerAuth()
   @Get()
   async getProfile(@Req() request: Request): Promise<any> {
@@ -28,7 +27,6 @@ export class ProfileController {
 
   @ApiOperation({ summary: 'Update user profile' })
   @ApiResponse({ status: 200, type: ProfileDto })
-  @IsNeedActivation()
   @ApiBearerAuth()
   @Put()
   async updateProfileById(

@@ -57,7 +57,8 @@ export class CommentsController {
     @Body() profileDto: CreateCommentDto,
   ): Promise<CommentDto> {
     const userId = request['user']['id'];
-    return this.commentsService.createComment(userId, profileDto);
+    const isAdmin = request['user']['role'] === Role.ADMIN;
+    return this.commentsService.createComment(isAdmin, userId, profileDto);
   }
 
   @ApiOperation({ summary: 'Get comment by id' })
@@ -95,7 +96,7 @@ export class CommentsController {
   }
 
   @ApiOperation({ summary: 'Delete comment by id' })
-  @ApiResponse({ status: 204, type: CommentDto })
+  @ApiResponse({ status: 204 })
   @IsNeedActivation()
   @ApiBearerAuth()
   @Delete('/:commentId')

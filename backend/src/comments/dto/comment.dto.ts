@@ -6,4 +6,10 @@ export class CommentDto {
 
   @ApiProperty({ example: 'content' })
   readonly content: string;
+
+  @ApiProperty({ example: '0226ccc2-7abb-4ee5-ad03-0002d6b9e0b8' })
+  readonly postId: string;
+
+  @ApiProperty({ example: '056445cf-9d85-4f97-9fbd-ba5c703891cc' })
+  readonly authorId: string;
 }

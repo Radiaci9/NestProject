@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ServerRedis } from '@nestjs/microservices';
 import { RedisClient } from '@nestjs/microservices/external/redis.interface';
 import { promisify } from 'util';
+import { DEFAULT_EXP_TIME } from '../constants';
 
 @Injectable()
 export class RedisService {
@@ -22,14 +23,19 @@ export class RedisService {
     return await this.client.get(key);
   }
 
-  async setValue(key: string, value: string | number): Promise<void> {
-    await this.client.set(key, value);
+  async setValue(
+    key: string,
+    value: string | number,
+    expTime = DEFAULT_EXP_TIME,
+  ): Promise<void> {
+    await this.client.set(key, value, 'Ex', expTime);
   }
 
   async getValues(key: string): Promise<any> {
     return await this.client.lrange([key, 0, -1]);
   }
 
+  // i don't know how to set Exp time to list
   async pushValues(key: string, values: string[] | number[]): Promise<void> {
     await this.client.lpush([key, ...values]);
   }
